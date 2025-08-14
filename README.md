@@ -1,2 +1,3 @@
 # studying_pygame_alien_invasion
-studying_pygame
+# studying_pygame
+just beginning
