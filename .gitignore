@@ -3,4 +3,5 @@
 __pycache__/
 Include/
 Lib/site-packages/pygame/__pycache__
+Lib/site-packages/_pytest/
 Scripts/
