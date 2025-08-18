@@ -35,16 +35,4 @@ pip upgrade : ``` python -m pip install --upgrade pip ```
 ``` os.path.dirname(os.path.abspath(os.path.dirname(__file__))) ```
 2. 2단계 상위 폴더
 ``` os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__)))))) ```
-3. import sys, os
-
-```
-import sys, os
-
-# sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-
-# 상위 폴더 경로 가져오기
-parent_folder = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-# 상위 폴더 경로를 sys.path에 추가
-sys.path.append(parent_folder)
-```
+import sys, os는 해야 함
