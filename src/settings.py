@@ -1,4 +1,4 @@
-class Setting:
+class Settings:
     """외계인 침공의 설정을 저장하는 클래스"""
     
     def __init__(self):
