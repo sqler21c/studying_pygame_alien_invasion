@@ -4,6 +4,6 @@ class Settings:
     def __init__(self):
         """게임 설정초기화"""
         # 화면 설정
-        self.screen__width = 1200
+        self.screen_width = 1200
         self.screen_height = 800
         self.bg_color = (230, 230, 230)  # 밝은 회색
