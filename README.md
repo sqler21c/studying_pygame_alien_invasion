@@ -36,3 +36,22 @@ pip upgrade : ``` python -m pip install --upgrade pip ```
 2. 2단계 상위 폴더
 ``` os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__)))))) ```
 import sys, os는 해야 함
+
+
+## Date 2025.08.18
+### alien_invasion.py
+1. frame 속도 제어
+   > self.clock = pygame.time.Clock()
+   > self.clock.tick)(60)
+2. 배경색 설정
+   > 배경색 설정
+   > self.bg_clolor = (230, 230, 230)
+   > 루프 반복때마다 화면을 다시 그림
+   > self.screen.fill(self.bg_color)
+
+### settings.py 추가
+1. alien_invasion.py에서 인스턴스를 만들어 설정에 접근 함
+
+### images 폴더를 만들고 ship.bmp 추가
+1. ship 클래스 만들기
+   
