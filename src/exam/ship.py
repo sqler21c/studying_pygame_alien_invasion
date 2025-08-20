@@ -9,11 +9,12 @@ class Ship:
         self.screen_rect = ai_game.screen.get_rect()
         
         # 우주선 이미지를 불러오고 사각형을 가져 온다
-        self.image = pygame.image.load('src/images/ship.bmp') 
+        self.image = pygame.image.load('src/exam/images/ship.bmp') 
         self.rect = self.image.get_rect()
         
         # 우주선의 초기 위치는 화면 하단 중앙
-        self.rect.midbottom = self.screen_rect.midbottom
+        # self.rect.midbottom = self.screen_rect.midbottom
+        self.rect.center = self.screen_rect.center  # 화면 중앙으로 위치 조정
         
     def blitme(self):
         """우주선을 현재 위치에 그림"""
