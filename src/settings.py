@@ -7,3 +7,4 @@ class Settings:
         self.screen_width = 1200
         self.screen_height = 800
         self.bg_color = (230, 230, 230)  # 밝은 회색
+        self.ship_speed = 1.5 # 우주선 속도 설정

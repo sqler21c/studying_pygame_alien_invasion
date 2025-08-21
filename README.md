@@ -95,3 +95,15 @@ import sys, os는 해야 함
 
       pygame.display.flip()
    ```
+### 우주선 조종하기
+1. 키 입력에 응답하기
+   1. 파이게임이 KEYDOWN이벤트를 감지 할때마다 우리가 원하는 키인지 확인
+   2. 가령 오른쪽 화살표를 누르면 우주선의 rect.x값을 증가시켜 우주선을 오른쪽으로 이동
+   3. 왼쪽이동은 rect.x값을 감소 시켜 왼쪽으로 이동함
+2. 우주선 속도 조정
+   1. Settings 클래스에 ship_speed속청 추가해서 속도 조절
+3. 우주선 이동범위 정하기
+   1. ship의 update()메소드 수정
+4. _check_events() 리펙토링
+   1. KEYDOWN이벤트 처리, KEYUP이벤트 처리 메서드 두개 분리
+5. 전체 화면 모드 PALY추가 in alien_invasion.py
