@@ -107,3 +107,12 @@ import sys, os는 해야 함
 4. _check_events() 리펙토링
    1. KEYDOWN이벤트 처리, KEYUP이벤트 처리 메서드 두개 분리
 5. 전체 화면 모드 PALY추가 in alien_invasion.py
+
+## Date 2025.08.20
+### Page 341 연습문제
+1. 파이게임 문서
+   1. [pygame](https://pygame.org)
+   2. [pygame doucment](https://pygame.org/docs)
+2. 로켓
+   1. 화면 중앙에 로켓이 있는 게임을 만드세요. 플레이어는 화살표 키를 써서 상하좌우 이동 시키고 화면 가장자리 벗어 나면 안됨
+   2. 
