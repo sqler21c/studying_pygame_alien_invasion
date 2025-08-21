@@ -29,24 +29,9 @@ class AlienInvasion:
         """ Start the main loop for the game """
         while True:
             self._check_events() # helper method 추가
-            ###########################################
-            # helper method로 이동 def _check_events()
-            # """ keyboard and mouse event 처리 """
-            # for event in pygame.event.get():
-            #     if event.type == pygame.QUIT:
-            #         sys.exit()
-            ###########################################
+            self.ship.update()
             self._update_screen() # 화면 업데이트
-            
-            #################################################
-            # helper method로 이동 def _update_screen()
-            # # 루프를 반복할때마다 화면을 다시 그립니다. 
-            # # self.screen.fill(self.bg_color)를 아래와 같이 settings 클래스 사용
-            # self.screen.fill(self.settings.bg_color)
-            # self.ship.blitme() # 우주선 그리기                
-            # # 가장 최근 그린 화면을 표시
-            # pygame.display.flip() # 화면 업데이트
-            #################################################
+
             self.clock.tick(60) # frame 속도
             
     def _check_events(self):
@@ -54,6 +39,10 @@ class AlienInvasion:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                self._check_keydown_events(event)
+            elif event.type == pygame.KEYUP:
+                self._check_keyup_events(event)
     
     def _update_screen(self):
         """ 화면 업데이트 """
@@ -62,6 +51,27 @@ class AlienInvasion:
         
         pygame.display.flip()
         
+    def _check_keydown_events(self, event):
+        if event.key == pygame.K_RIGHT:
+            self.ship.moving_right = True
+        elif event.key == pygame.K_LEFT:
+            self.ship.moving_left = True
+        elif event.key == pygame.K_UP:
+            self.ship.moving_up = True
+        elif event.key == pygame.K_DOWN:
+            self.ship.moving_down = True
+        elif event.key == pygame.K_q:
+            sys.exit()
+
+    def _check_keyup_events(self, event):
+        if event.key == pygame.K_RIGHT:
+            self.ship.moving_right = False
+        elif event.key == pygame.K_LEFT:
+            self.ship.moving_left = False
+        elif event.key == pygame.K_UP:
+            self.ship.moving_up = False
+        elif event.key == pygame.K_DOWN:
+            self.ship.moving_down = False
 
 if __name__ == '__main__':
     # make intance of AlienInvasion
