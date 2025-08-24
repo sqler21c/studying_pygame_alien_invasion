@@ -108,11 +108,198 @@ import sys, os는 해야 함
    1. KEYDOWN이벤트 처리, KEYUP이벤트 처리 메서드 두개 분리
 5. 전체 화면 모드 PALY추가 in alien_invasion.py
 
-## Date 2025.08.20
+## Date 2025.08.21
 ### Page 341 연습문제
 1. 파이게임 문서
    1. [pygame](https://pygame.org)
    2. [pygame doucment](https://pygame.org/docs)
 2. 로켓
    1. 화면 중앙에 로켓이 있는 게임을 만드세요. 플레이어는 화살표 키를 써서 상하좌우 이동 시키고 화면 가장자리 벗어 나면 안됨
-   2. 
+
+
+## Date  2025.08.22
+### markdown 내부 인덱스 시험
+   . [여기](#1-python-module--using-pygame) 
+### Page340 탄환을 쏘기 전 빠른 준비
+그 동안의 파일 정리
+1. alien_invasion.py
+   
+    메인 파일인 alien_invasion.py에는 AlienInvasion 클래스가 있습니다.
+   이 클래스에는 게임 전체에서 사용되는 다양한 중요 속성이 있습니다. 설정은 settings에 디스펭에이 서피스는 screen에 할당되고 ship인스턴스 역시 이 파일에서 만듭니다. 게임의 메인 루프인 while 루프도 이 모듈에 속합니다. 
+   while루프는 _check_events(), ship.update(), _update_screen()을 호출하며 반볼될 때마다 시계를 움직입니다
+   _check_events() 메서드는 키입력과 해제 같은 이벤트 담당
+
+2. setting.py
+   
+   setting.py에는 Settings클래스가 있습니다. 이클래스에서는 게임의 모양, 우주선 속도 관련 속성을 초기화하는 __init__()a메서드만 있습니다. 
+
+3. ship.py
+   
+   ship.py에는 Sip클래스가 있습니다. Ship클래스에는 __init__()메서드 우주선 위치를 결정하는 update() 메서드, 우주선을 화면에 그리는 blitme()메서드가 있습니다. 
+   우주선 이미지는 images폴더의 ship.bmp입니다.
+
+### 탄환 발사하기
+플레이어가 "Space"를 누르면 탄환(작은 사각형)이 발사되고 탄한은 화면 위 쪽을 향해 직진하며 화면을 벗어나면 사라짐  **page 342**
+
+1. 탄환설정추가하기
+   
+   setting.py의 __init__() 마지막에 Bullet클래스에 필요한 값이 들어가도록 setting.py를 업데이트 합니다.
+   ```python
+   def __init__(self):
+      -- 생략 --
+      #탄환 설정
+      self.bullet_speed = 2.0
+      self.bullet_width = 3
+      self.bullet_height = 15
+      self.bullet_color = (60, 60, 60)
+   
+   ```
+
+2. Make Bullet class
+   
+   Bullet클래슬ㄹ 저장할 bullet.py파일을 만듦.
+   ```python
+   import pygame
+   from pygame.sprite import Sprite
+
+   class Bullet(Sprite):
+    """ 우주선이 발사하는 탄환을 관리는 클래스 """
+    
+    def __init__(self, ai_game):
+        """ 우주선의 현재 위치에서 탄환 개체를 만듦"""
+        super().__init__()
+        self.screen = ai_game.screen
+        self.settings = ai_game.settings
+        self.color = self.settings.bullet_color
+        
+        # (0, 0)탄환 사각형을 만들고 위치를 설정
+        self.rect = pygame.Rect(0, 0, self.settings.bullet_width, 
+                                self.settings.bullet_height) # 1
+        self.rect.midtop = ai_game.ship.rect.midtop #2
+        
+        # 탄환 위치를 부동 소수점 숫자로 저장
+        self.y = float(self.rect.y)  #3
+
+   ```
+   Sprite를 상속, 스프라이트를 사용하면 게임의 관련 요소를 그룹으로 묶고 그룹의 요소 전체를 한번에 조작할 수 있음
+   탄환 인스턴스를 만들기 위해서는 init()이 AlienInvasion의 현재 인스턴스를 받아야 합니다. 또한 Sprite를 상송하기위해서는 super()의 init()을 호출
+   화면과 설정 객체, 탄환 색깔에 대한 속성도 초기화
+
+   #1 탄환의 rect속성   
+   #2 탄환의 midtop속성을 우주선의 midtop속성으로 맞춤   
+   #3 탄환 속도를 세밀히 하기 위해 부동 소숫점 숫자 사용
+   ```python
+   def update(self):
+        """ 탄환이 화면 위 방향으로 이동 """
+        # 탄환 위치 업데이트
+        self.y -= self.settings.bullet_speed
+        # 사각형(rect) 위치 업데이트
+        self.rect.y = self.y
+   
+   def draw_bullet(self):
+        """ 화면에 탄환을 그리기 """
+        pygame.draw.rect(self.screen, self.color, self.rect)
+   ```
+3. 탄환을 그룹에 저장하기
+   Bullet 클래스를 만들고 필요한 설정을 했으니 플레이어가 스페이스바를 누를때마다 탄환을 발사하는 코드 만들기. 이미 발사한 탄환을 묶어서 관리할 수 있도록 AienInvasion에 그룹을 만듦. 이 그룹은 pygame.Sprite.Group클래스의 인스턴스 이다.
+
+   ```python
+   # alien_invasion.py
+   from bullet import Bullet
+
+   # __init__()에서는 탄환 그룹을 만든다.
+   def __init__(self):
+      --생략--
+      self.ship = Ship(self)
+      self.bullets = pygame.sprite.Group()
+
+   # while 루프를 반복할때마다 탄환위치 업데이트
+
+   def run_game(self):
+      -- 생략 --
+      self.ship.update()
+      self.bullets.update() # 여기 추가
+   ```
+
+4. 탄환 발사하기
+   ```python
+   # alien_invasion.py
+
+   def _check_keydown_events(self, event):
+        """ Key를 누를때 응답 처리 """
+        if event.key == pygame.K_RIGHT:
+            self.ship.moving_right = True
+        elif event.key == pygame.K_LEFT:
+            self.ship.moving_left = True
+        elif event.key == pygame.K_q:
+            sys.exit()
+        elif event.key == pygame.K_SPACE:  # 추가
+            self._fire_bullet()
+
+   def _update_screen(self):
+        """ 화면 업데이트 """
+        self.screen.fill(self.settings.bg_color)
+        
+        for bullet in self.bullets.sprites(): # 추가
+            bullet.draw_bullet()
+            
+        self.ship.blitme()
+        
+        pygame.display.flip()
+
+   def _fire_bullet(self):
+        """새 탄환을 만들어 탄환 그룹에 추가 합니다"""
+        new_bullet = Bullet(self)
+        self.bullets.add(new_bullet)    
+   ```
+
+5. 창을 벗어난 탄환 제거하기
+   ```python
+   # alien_invasion.py
+   def run_game(self):
+        """ Start the main loop for the game """
+        while True:
+          - 생략 --
+            
+            # 사라진 탄환 제거 
+            for bullet in self.bullets.copy(): #1
+                if bullet.rect.bottom <= 0: #2
+                    self.bullets.remove(bullet) #3
+                print(len(self.bullets)) #4
+   ```
+   #1 copy()메서드를 사용해 for loop 만듦, 이렇게 하면 루프안에서 원본그룹이 변하지 않음   
+   #2 탄환이 화면을 벗어 나는지 확인 , 벗어났다면 bullet에서 제거(#3)   
+   #4 현재 게임에 탄환 몇개 있는지 확인 하는 print()
+
+6. 탄환 수 제한 하기
+   ```python
+   #settings.py
+
+   def __init__(self):
+       -- 생략 --
+        self.bullet_color = (60, 60, 60) # 탄환 색상
+        self.bullets_allowed = 3 # 화면에 존재할 수 있는 탄환 수 ==> 추가
+   # alien_inavasion.py
+
+   def _fire_bullet(self):
+        """새 탄환을 만들어 탄환 그룹에 추가 합니다"""
+        if len(self.bullets) < self.settings.bullets_allowed:
+            new_bullet = Bullet(self)
+            self.bullets.add(new_bullet)    
+   ```
+ 플레이어가 space를 누르면 먼저 bullets이 길이 확인, len(self.bullets)가 3보다 작으면 새탄환을 만든다. 하지만 새개가 이미 발사된 상태이면 space를 눌러도 아무일도 일ㄷ어 나지 않는다. 
+
+ 7. _update_bullets()메서드
+   AllienInvasion클래스는 가능한 간결하게 유지 하는게 좋음, 단환을 관리하는 코드를 작성하고 체크했으니 이를 별도의 메서드로 분리, 새 메서드 _update_bullets()를 만들고 이를 _update_screen()바로 앞으로 이동 합니다.
+   ```python
+   # alien_invasion.py
+       def _update_bullets(self):
+        """ 탄환 위치를 업데이트하고 사라진 탄환을 제거"""
+        self.bullets.update()
+        
+        # 사라진 탄환 제거
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0 :
+                self.bullets.remove(bullet)
+   ```
+   _update_bullets()코드는 run_game에서 가져옮, 
