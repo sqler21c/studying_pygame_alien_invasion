@@ -303,3 +303,88 @@ import sys, os는 해야 함
                 self.bullets.remove(bullet)
    ```
    _update_bullets()코드는 run_game에서 가져옮, 
+
+## Date 2025.08.25
+### Page 350  연습문제 in exam
+우주선을 화면 왼쪽. 배치 플에이어가 상하, 스페이스 누르면 우주선 탄환 발사 이탄환은 화면을 가로질러 왼쪽에서 오른쪽으로 이동 화면에서 사라진 탄환 제거    
+
+1. 우주선을 화면 왼쪽 중앙에 배치
+   ```python
+   # ship.py
+    def __init__(self, ai_game):
+      -- 생략 --
+        
+        # 우주선 이미지를 불러오고 사각형을 가져 온다
+        self.image = pygame.image.load('src/exam/images/ship.bmp') 
+        self.image = pygame.transform.rotate(self.image, -90) # image 오른쪽으로 90도 회전
+        self.rect = self.image.get_rect()
+        --생략 --
+        # 우주선의 초기 위치 화면 왼쪽 중앙에 위치
+        self.rect.left = self.screen_rect.left
+        # self.rect.right = self.screen_rect.right
+        self.rect.centery = self.screen_rect.centery
+
+      --생략--
+   ```
+2. 상하 키 이동 
+   ```python
+   #alien_invasion.py
+
+   def _check_keydown_events(self, event):
+        # if event.key == pygame.K_RIGHT:
+        #     self.ship.moving_right = True
+        # elif event.key == pygame.K_LEFT:
+        #     self.ship.moving_left = True
+        if event.key == pygame.K_UP:
+            self.ship.moving_up = True
+        elif event.key == pygame.K_DOWN:
+            self.ship.moving_down = True
+        elif event.key == pygame.K_q:
+            sys.exit()
+   ```
+   K_right, K_left 주석 처리 상하만 이동 하도록 함
+
+3. 스페이스 누르면 탄환 발사 화면을 가로 질러 사라진 탄환 제거   
+   탄환 관리를 위해 bullet.py파일 생성
+   ```python
+
+   # setting.py
+    def __init__(self):
+        -- 생략 --
+        
+        # 탄환 설정
+        self.bullet_speed = 1.0 # 탄환 속도 설정
+        self.bullet_width = 3
+        self.bullet_height = 15
+        self.bullet_color = (60, 60, 60)
+
+   # bullet.py
+
+   import pygame
+   from pygame.sprite import Sprite
+
+   class Bullet(Sprite):
+    def __init__(self, ai_game):
+        """ 우주선의 현재 위치에서 탄환 개체를 만듦"""
+        super().__init__()
+        self.screen = ai_game.screen
+        self.settings = ai_game.settings
+        self.color = self.settings.bullet_color
+        
+        # (0, 0)탄환 사각형을 만들고 위치를 설정
+        self.rect = pygame.Rect(0, 0, self.settings.bullet_width, 
+                                self.settings.bullet_height)
+        self.rect.right = ai_game.ship.rect.centerx
+        
+        # 탄환 위치를 부동 소수점 숫자로 저장
+        self.x = float(self.rect.x)
+
+    def update(self):
+        """탄환을 왼쪽에서 오른쪽으로 이동"""
+        self.x += self.settings.bullet_speed
+        self.rect.y = self.y
+
+    def draw_bullet(self):
+        """화면에 탄환을 그리기"""
+        pygame.draw.rect(self.screen, self.color, self.rect)
+   ```

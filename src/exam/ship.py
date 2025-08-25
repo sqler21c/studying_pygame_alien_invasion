@@ -11,11 +11,16 @@ class Ship:
         
         # 우주선 이미지를 불러오고 사각형을 가져 온다
         self.image = pygame.image.load('src/exam/images/ship.bmp') 
+        self.image = pygame.transform.rotate(self.image, -90) # image 오른쪽으로 90도 회전
         self.rect = self.image.get_rect()
         
         # 우주선의 초기 위치는 화면 하단 중앙
         # self.rect.midbottom = self.screen_rect.midbottom
-        self.rect.center = self.screen_rect.center  # 화면 중앙으로 위치 조정
+        # self.rect.center = self.screen_rect.center  # 화면 중앙으로 위치 조정
+        # 우주선의 초기 위치 화면 왼쪽 중앙에 위치
+        self.rect.left = self.screen_rect.left
+        # self.rect.right = self.screen_rect.right
+        self.rect.centery = self.screen_rect.centery
         
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)

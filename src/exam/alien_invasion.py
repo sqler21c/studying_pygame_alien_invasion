@@ -2,6 +2,7 @@ import sys
 import pygame
 from settings import Settings
 from ship import Ship
+from bullet import Bullet
 
 class AlienInvasion:
     """게임 자원과 동작을 전체적으로 관리하는 클래스"""
@@ -20,6 +21,7 @@ class AlienInvasion:
         pygame.display.set_caption("Alien Invasion") # 게임 제목 설정
         
         self.ship = Ship(self)  # 우주선 인스턴스 생성
+        self.bullets = pygame.sprite.Group()  # 탄환 그룹 생성
         
         # self.bg_color = (230, 230, 230)  # 밝은 회색
         # 배경색 설정
@@ -31,7 +33,7 @@ class AlienInvasion:
             self._check_events() # helper method 추가
             self.ship.update()
             self._update_screen() # 화면 업데이트
-
+            self._update_bullets() # 사라진 탄환 제거 
             self.clock.tick(60) # frame 속도
             
     def _check_events(self):
@@ -44,24 +46,41 @@ class AlienInvasion:
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
     
+    def _update_bullets(self):
+        """ 탄환 위치 업데이트 하고 사라진 탄환 제거"""
+        self.bullets.update()
+        
+        # 사라진 탄환 제거
+        for bullet in self.bullets.copy():
+            if bullet.rect.left >= self.screen.get_width():
+                self.bullets.remove(bullet)
+
+            print(self.bullets)
+
     def _update_screen(self):
         """ 화면 업데이트 """
         self.screen.fill(self.settings.bg_color)
+        
+        for bullet in self.bullets.sprites():
+            bullet.draw_bullet()
+            
         self.ship.blitme()
         
         pygame.display.flip()
         
     def _check_keydown_events(self, event):
-        if event.key == pygame.K_RIGHT:
-            self.ship.moving_right = True
-        elif event.key == pygame.K_LEFT:
-            self.ship.moving_left = True
-        elif event.key == pygame.K_UP:
+        # if event.key == pygame.K_RIGHT:
+        #     self.ship.moving_right = True
+        # elif event.key == pygame.K_LEFT:
+        #     self.ship.moving_left = True
+        if event.key == pygame.K_UP:
             self.ship.moving_up = True
         elif event.key == pygame.K_DOWN:
             self.ship.moving_down = True
         elif event.key == pygame.K_q:
             sys.exit()
+        elif event.key == pygame.K_SPACE:
+            self._fire_bullet()
 
     def _check_keyup_events(self, event):
         if event.key == pygame.K_RIGHT:
@@ -72,6 +91,12 @@ class AlienInvasion:
             self.ship.moving_up = False
         elif event.key == pygame.K_DOWN:
             self.ship.moving_down = False
+            
+    def _fire_bullet(self):
+        """ 새 탄환을 만들어 그룹에 추가 한다."""
+        if len(self.bullets) < self.settings.bullets_allowed:
+            new_bullet = Bullet(self)
+            self.bullets.add(new_bullet)
 
 if __name__ == '__main__':
     # make intance of AlienInvasion

@@ -8,3 +8,10 @@ class Settings:
         self.screen_height = 800
         self.bg_color = (230, 230, 230)  # 밝은 회색
         self.ship_speed = 1.5 # 우주선 속도 설정
+        
+        # 탄환 설정
+        self.bullet_speed = 3.0 # 탄환 속도 설정
+        self.bullet_width = 15
+        self.bullet_height = 3
+        self.bullet_color = (60, 60, 60)
+        self.bullets_allowed = 100
