@@ -37,6 +37,9 @@ pip upgrade : ``` python -m pip install --upgrade pip ```
 ``` os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__)))))) ```
 import sys, os는 해야 함
 
+>참고   
+> https://github.com/ehmatthes/pcc_3e/
+
 
 ## Date 2025.08.18
 ### alien_invasion.py
@@ -387,4 +390,19 @@ import sys, os는 해야 함
     def draw_bullet(self):
         """화면에 탄환을 그리기"""
         pygame.draw.rect(self.screen, self.color, self.rect)
+   ```
+## Date 2025.08.26
+### Chapter 13
+1. 프로젝트 검토하기
+   1. 화면 왼쪽 상단 꼭지점에 외계인을 추가하되, 주위에 공백을 적절히 남긴다.
+   2. 화면 상단을 외계인으로 채운다. 그리고 외계인을 몇줄 추가해 함대를 만든다.
+   3. 함대를 좌우와 아래로 움직이게 만든다. 함대 전체를 격추하거나, 외계인이 우주선과 충돌하거나, 외계인이 화면 하단에 도달할때까지 이를 반복, 함대 전체를 격추하면 새로운 함대를 만듦,
+   4. 외계인이 우주선과 충돌하거나 화면 하단에 도달하면 우줏헌을 파괴하고 함대를 새로 만든다
+   5. 플레이어가 쓸 수 있는 우주선 개수를 재한하고 우주선이 모두 파괴되면 게임을 끝낸다.
+### 첫 번째 외계인 만들기
+외계인을 배치하는건 우주선을 배치하는 것과 동일, 각 외계인은 alie zmffo
+1. Alien 클래스
+   ```python
+   # alien.py
+   
    ```
