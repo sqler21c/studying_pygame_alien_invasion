@@ -406,3 +406,9 @@ import sys, os는 해야 함
    # alien.py
    
    ```
+
+## Date 2025.08.27
+### Addedee Studying git
+> ./src 폴더에 STUDYGIT.md 파일 추가 후 link
+
+[click >> ](./src/STUDYGIT.md)
