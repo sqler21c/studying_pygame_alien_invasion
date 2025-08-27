@@ -404,5 +404,52 @@ import sys, os는 해야 함
 1. Alien 클래스
    ```python
    # alien.py
-   
+
+   import pygame
+   from pygame.sprite import Sprite
+   class Alien(Sprite):
+    """함 대에 외계인 하나를 나타내는 클래스"""
+    def __init__(self, ai_game):
+        """ 외계인 추기화하고 시작 위치 설정"""
+        super().__init__()
+        self.screen = ai_game.screen
+
+        # 외계인 이미지 불러와  rect 속성 설정
+        self.image = pygame.image.loade('src/images/alien.bmp')
+        self.rect = self.image.get_rect()
+
+        # 외계인은 좌면 좌측 상단 근처에 만듦
+        self.rect.x = self.rect.width  #1
+        self.rect.y = self.rect.height
+
+        # 외계인의 정확한 가로 위치 저장
+        self.x = float(self.rect.x) #2
    ```
+   ship class와 비슷하지만, 외계인을 화면ㅇ에 배치하는 부분이 다르다. 먼저 외계인을 화면의 왼쪽 상단 꼭짓점 근처에 배치 , 외계인을 알아보기 쉽도록 왼쪽에는 외계와 같은 공백을 두고(#1) 위에도 외계인의 높이와 같은 공ㄷ백, 지금은 외계인의 가로방향 움직임에 주의 가로 방향좌표 추적(#2)
+
+2. make Alien instance
+   AlienInvasion init()  마지막에 인스턴스 생성 코드 추가, 결국 외계인 함대 전체를 만듦, 추가 보조 메서드 
+   _create_fleet()을 새로 만듦
+   ```python
+   # alien_invasion.py
+
+   from alien import Alien
+
+   def __init__(self):
+      -- 생략 --
+      self.alien = pygame.sprite.Group()
+
+      self._create_fleet()
+
+   def _create_fleet(self):
+      alien = Alien(self)
+      slelf.aliens.add(alien)
+
+   def _update_screen(self):
+      self.aliens.draw(self.screen)
+   ```
+### 외계인 함대 만들기
+1. 외계인 한줄 만들기
+   하나를 만들어 너비를 파악 후 외계인을 화면 왼쪽에 배치한 다음 공간이 있으면 추가 이를 계속
+2. _create_fleet() 리팩터링
+3. 
