@@ -83,5 +83,43 @@ git이 파일을 관리하게 하려면 저장소에 파일을 추가하고 커�
 ### 기존 저장소를 clone하기
 git clone <url>명령어로 저장소 clone한다
 > git clone https://githum..;..../.../ff   
-> git clone https://githum..;..../.../ff   mylib..
+> git clone https://githum..;..../.../ff   mylib...
 
+### stageing 
+> git add file or fold
+
+### unstaging 
+> git reset file
+
+### 파일 상태 확인 
+> git status   
+> git status -s   
+> git status--short 
+
+### 파일 무시하기
+파일 관리가 필요 없는 것은 ".gitignore"에 
+규칙은 다음과 같다.
+- 아무것도 없는 라인이나, '#'으로 시작하는 라인은 무시
+- 표준 Glob패턴 사용. 이는 프로젝트 전체에 적용
+- 슬래시(/)로 시작하면 하위 디렉텍토리에 적용되지 않는다.
+- 디랙토리는 슬래시(/)를 끝에 사용하는 것으로 표현 한다
+- 느낌표(!)로 시작하는 패턴의 파일은 무시 하지 않는다. 
+```
+# 확장자가 .a인 파일 무시
+*.a
+
+# 윗 라인에서 확장자가 .a인 파일을 무시하게 했지만 lib.a는 무시 하지 않음
+!lib.a
+
+# 현재 디렉토리에 있는 todo파일은 무시하고 subdir/todo처럼 하위디렉토리는 무시하지 않음
+/todl
+
+# build/ 디렉토리 있느 ㄴ모든 파일 무시
+build/
+
+# doc/notes.txt 은 무시, doc/server/arch.txt 무시하지 않음
+doc/*txt
+
+# doc디렉토리 아래의 모든 .pdf 파일 무시
+doc/**/*.pdf
+```
