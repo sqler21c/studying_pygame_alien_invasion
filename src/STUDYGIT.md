@@ -131,3 +131,10 @@ doc/**/*.pdf
 > git diff --staged ==> staging area에 넣은 파일 비교
 
 변경된 자세한 내용.. Stage한 후 다시 수정 해도 git diff를 사용할 수 있다. 이때는 staged상태인것과 unstaged상태인 것을 비교한다
+staged된 파일은 git diff --ceched옵셔능로 확인. --staged, --ceched는 같은 옵션이다.
+
+### 변경사항 커밋
+커밋은 staged된 파일에만 적용됨. unstaged는 커밋안됨
+커밋 하기전에 git status로 확인 후 
+> git commit
+
