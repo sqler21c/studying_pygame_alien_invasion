@@ -123,3 +123,11 @@ doc/*txt
 # doc디렉토리 아래의 모든 .pdf 파일 무시
 doc/**/*.pdf
 ```
+
+### staged와 unstaged상태의 변경 내용보기
+> git status ==> 단순 파일 변경
+
+> git diff   
+> git diff --staged ==> staging area에 넣은 파일 비교
+
+변경된 자세한 내용.. Stage한 후 다시 수정 해도 git diff를 사용할 수 있다. 이때는 staged상태인것과 unstaged상태인 것을 비교한다
