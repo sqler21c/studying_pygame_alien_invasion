@@ -3,6 +3,7 @@ import pygame
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
+from alien import Alien
 
 class AlienInvasion:
     """게임 자원과 동작을 전체적으로 관리하는 클래스"""
@@ -28,6 +29,9 @@ class AlienInvasion:
         
         self.ship = Ship(self)  # 우주선 인스턴스 생성
         self.bullets = pygame.sprite.Group()  # 탄환 그룹 생성
+        self.aliens = pygame.sprite.Group()   # 외계인 그룹 생성
+
+        self.create_fleet()  # 외계인 무리 생성
         
         # self.bg_color = (230, 230, 230)  # 밝은 회색
         # 배경색 설정
@@ -94,6 +98,30 @@ class AlienInvasion:
             if bullet.rect.bottom <= 0 :
                 self.bullets.remove(bullet)
     
+    def _create_fleet(self):
+        """ 외계인 함대를 만듦"""
+        # 외계인 하나를 만들어서 그 너비와 높이를 구함
+        alien = Alien(self)
+        alien_width = alien.rect.width
+
+        current_x = alien_width
+        while current_x <(saelf.settings.screen_width -2 * alien_width):
+            # new_alien = Alien(self)
+            # new_alien.x = current_x
+            # new_alien.rect.x = new_alien.x
+            # self.aliens.add(new_alien)
+            self._create_alien(current_x)
+            current_x += 2 * alien_width
+            
+            # self.aliens.add(alien)
+
+    def _create_alien(self, x_position):
+        new_alien = Alien(self)
+        new_alien.x = x_position
+        new_alien.rect.x = x_position
+        self.aliens.add(new_alien)
+
+
     def _update_screen(self):
         """ 화면 업데이트 """
         self.screen.fill(self.settings.bg_color)
@@ -102,6 +130,7 @@ class AlienInvasion:
             bullet.draw_bullet()
             
         self.ship.blitme()
+        self.aliens.draw(self.screen) # 외계인 그리기
         
         pygame.display.flip()
         
