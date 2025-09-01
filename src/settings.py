@@ -15,3 +15,9 @@ class Settings:
         self.bullet_height = 15 # 탄환 높이
         self.bullet_color = (60, 60, 60) # 탄환 색상
         self.bullets_allowed = 3 # 화면에 존재할 수 있는 탄환 수
+
+        # 외계인 속도 설정
+        self.alien_speed = 1.0
+        self.fleet_drop_speed = 10
+        # 1은 오른쪽, -1은 왼쪽
+        self.fleet_diretion = 1

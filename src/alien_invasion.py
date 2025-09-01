@@ -31,7 +31,7 @@ class AlienInvasion:
         self.bullets = pygame.sprite.Group()  # 탄환 그룹 생성
         self.aliens = pygame.sprite.Group()   # 외계인 그룹 생성
 
-        self.create_fleet()  # 외계인 무리 생성
+        self._create_fleet()  # 외계인 무리 생성
         
         # self.bg_color = (230, 230, 230)  # 밝은 회색
         # 배경색 설정
@@ -58,7 +58,8 @@ class AlienInvasion:
             #     if bullet.rect.bottom <= 0:
             #         self.bullets.remove(bullet)
             #     print(len(self.bullets))
-            
+            self._update_aliens()
+
             #################################################
             # helper method로 이동 def _update_screen()
             # # 루프를 반복할때마다 화면을 다시 그립니다. 
@@ -97,28 +98,41 @@ class AlienInvasion:
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0 :
                 self.bullets.remove(bullet)
-    
+    def _update_aliens(self):
+        """함대에 속한 외계인의 위치를 모두 업데이트 함"""
+        self.aliens.update()
+
     def _create_fleet(self):
         """ 외계인 함대를 만듦"""
-        # 외계인 하나를 만들어서 그 너비와 높이를 구함
+        # 외계인 하나를 만들어서 그 너비와 높이를 구함 공간이 없을때까지 계속 추가
+        # 외계인 사이의 공간으 ㄴ외계인의 너비와 높이와 같음
         alien = Alien(self)
-        alien_width = alien.rect.width
+        # alien_width = alien.rect.width
+        alien_width, alien_height = alien.rect.size #1
 
-        current_x = alien_width
-        while current_x <(saelf.settings.screen_width -2 * alien_width):
-            # new_alien = Alien(self)
-            # new_alien.x = current_x
-            # new_alien.rect.x = new_alien.x
-            # self.aliens.add(new_alien)
-            self._create_alien(current_x)
-            current_x += 2 * alien_width
+        current_x, current_y = alien_width, alien_height #2
+                # current_x = alien_width
+        while current_y < (self.settings.screen_height - 3 * alien_height):#3
+            while current_x <(self.settings.screen_width -2 * alien_width):
+                # new_alien = Alien(self)
+                # new_alien.x = current_x
+                # new_alien.rect.x = new_alien.x
+                # self.aliens.add(new_alien)
+                # self._create_alien(current_x)
+                self._create_alien(current_x, current_y) #4
+                current_x += 2 * alien_width
             
-            # self.aliens.add(alien)
+                # self.aliens.add(alien)
+            
+            #한줄이 끝났으니 x값은 초기화 y값은 늘린다.
+            current_x = alien_width #5
+            current_y += 2 * alien_height #5
 
-    def _create_alien(self, x_position):
+    def _create_alien(self, x_position, y_position):
         new_alien = Alien(self)
         new_alien.x = x_position
         new_alien.rect.x = x_position
+        new_alien.rect.y = y_position
         self.aliens.add(new_alien)
 
 

@@ -451,8 +451,7 @@ import sys, os는 해야 함
 ### 외계인 함대 만들기
 1. 외계인 한줄 만들기
    하나를 만들어 너비를 파악 후 외계인을 화면 왼쪽에 배치한 다음 공간이 있으면 추가 이를 계속
-2. _create_fleet() 리팩터링
-3. 
+
 
 
 ## Date 2025.08.27
@@ -460,3 +459,71 @@ import sys, os는 해야 함
 > ./src 폴더에 STUDYGIT.md 파일 추가 후 link
 
 [click >> ](./src/STUDYGIT.md)
+
+## Date 2025.08.29
+### 외계인 함대 만들기 
+2. _create_fleet() 리팩터링
+   보조 메서드 _create_alien()추가 하고 _create_fleet()에서 호출 하는 방식으로
+   ```python
+   def _create_fleet(self):
+        """ 외계인 함대를 만듦"""
+        # 외계인 하나를 만들어서 그 너비와 높이를 구함
+        alien = Alien(self)
+        alien_width = alien.rect.width
+
+        current_x = alien_width
+        while current_x <(self.settings.screen_width -2 * alien_width):
+            # new_alien = Alien(self)
+            # new_alien.x = current_x
+            # new_alien.rect.x = new_alien.x
+            # self.aliens.add(new_alien)
+            self._create_alien(current_x)
+            current_x += 2 * alien_width
+            
+            # self.aliens.add(alien)
+
+    def _create_alien(self, x_position):
+        new_alien = Alien(self)
+        new_alien.x = x_position
+        new_alien.rect.x = x_position
+        self.aliens.add(new_alien)
+   ```
+3. 줄 추가하가
+   현재 루프를 또 다른 while루프로 감쌉니다. 내부는 외계인 하줄, 외루 루프는 y값에 맞춰 세로로 베치
+   ```python
+    def _create_fleet(self):
+        """ 외계인 함대를 만듦"""
+        # 외계인 하나를 만들어서 그 너비와 높이를 구함 공간이 없을때까지 계속 추가
+        # 외계인 사이의 공간으 ㄴ외계인의 너비와 높이와 같음
+        alien = Alien(self)
+        # alien_width = alien.rect.width
+        alien_width, alien_height = alien.rect.size #1
+
+        current_x, current_y = alien_width, alien_height #2
+                # current_x = alien_width
+        while current_y < (self.settings.screen_height - 3 * alien_height):#3
+            while current_x <(self.settings.screen_width -2 * alien_width):
+                # new_alien = Alien(self)
+                # new_alien.x = current_x
+                # new_alien.rect.x = new_alien.x
+                # self.aliens.add(new_alien)
+                # self._create_alien(current_x)
+                self._create_alien(current_x, current_y) #4
+                current_x += 2 * alien_width
+            
+                # self.aliens.add(alien)
+            
+            #한줄이 끝났으니 x값은 초기화 y값은 늘린다.
+            current_x = alien_width #5
+            current_y += 2 * alien_height #5
+
+    def _create_alien(self, x_position, y_position):
+        new_alien = Alien(self)
+        new_alien.x = x_position
+        new_alien.rect.x = x_position
+        new_alien.rect.y = y_position
+        self.aliens.add(new_alien)
+   ```
+
+## Date 2025.09.01
+### 함대 오른쪽으로 움직이기
