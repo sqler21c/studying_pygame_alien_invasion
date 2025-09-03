@@ -20,4 +20,4 @@ class Settings:
         self.alien_speed = 1.0
         self.fleet_drop_speed = 10
         # 1은 오른쪽, -1은 왼쪽
-        self.fleet_diretion = 1
+        self.fleet_direction = 1

@@ -100,6 +100,10 @@ class AlienInvasion:
                 self.bullets.remove(bullet)
     def _update_aliens(self):
         """함대에 속한 외계인의 위치를 모두 업데이트 함"""
+        """_summary_
+        함대가 경계에 도달했는지 확인 하고 위치 업데이트
+        """
+        self._check_fleet_edges()
         self.aliens.update()
 
     def _create_fleet(self):
@@ -135,6 +139,18 @@ class AlienInvasion:
         new_alien.rect.y = y_position
         self.aliens.add(new_alien)
 
+    def _check_fleet_edges(self):
+        """함대가 화면의 가장자리에 도달했는지 확인"""
+        for alien in self.aliens.sprites():
+            if alien.check_edges():
+                self._change_fleet_direction()
+                break
+
+    def _change_fleet_direction(self):
+        """ 함대 전체를 한 줄 내리고 좌우 방향 변경"""
+        for alien in self.aliens.sprites():
+            alien.rect.y += self.settings.fleet_drop_speed
+        self.settings.fleet_direction *= -1
 
     def _update_screen(self):
         """ 화면 업데이트 """

@@ -527,3 +527,8 @@ import sys, os는 해야 함
 
 ## Date 2025.09.01
 ### 함대 오른쪽으로 움직이기
+
+## Date 2025.09.03
+### 외계인 아래로 내리고 방향을 반대로 바꾸기
+외계인이 경계에 도달하면 함대 전체를 한 줄 내리고 좌우 방향을 바꿔야 함. 
+_check_fleet_edges(), _change_fleet_direction()을 만들고 _update_aliens()수정
