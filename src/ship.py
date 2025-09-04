@@ -40,3 +40,8 @@ class Ship:
     def blitme(self):
         """우주선을 현재 위치에 그림"""
         self.screen.blit(self.image, self.rect)
+
+    def center_ship(self):
+        """우주선을 화면 중앙 하단에 위치"""
+        self.rect.midbottom = self.screen_rect.midbottom
+        self.x = float(self.rect.x)
