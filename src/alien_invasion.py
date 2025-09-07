@@ -4,6 +4,7 @@ from time import sleep
 import pygame
 from settings import Settings
 from game_stats import GameStats
+from button import Button
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
@@ -45,8 +46,12 @@ class AlienInvasion:
         # 배경색 설정
         self.bg_color = self.settings.bg_color
 
-        # 게임을 활성 상태로 시작
-        self.game_active = True
+        # 게임을 비활성 상태로 시작
+        self.game_active = False
+
+        # Play 버튼 만들기
+        self.play_button = Button(self, "Play")
+
 
     def run_game(self):
         """ Start the main loop for the game """
@@ -105,6 +110,21 @@ class AlienInvasion:
                 #     self.ship.moving_right = False
                 # elif event.key == pygame.K_LEFT:
                 #     self.ship.moving_left = False
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_play_button(mouse_pos)
+
+    def _check_play_button(self, mouse_pos):
+        """Check if the play button has been clicked.
+
+        Args:
+            mouse_pos (tuple): The (x, y) position of the mouse.
+        """
+        if self.play_button.rect.collidepoint(mouse_pos):
+            self.game_active = True
+
+
             
     def _update_bullets(self):
         """ 탄환 위치를 업데이트하고 사라진 탄환을 제거"""
@@ -231,6 +251,10 @@ class AlienInvasion:
             
         self.ship.blitme()
         self.aliens.draw(self.screen) # 외계인 그리기
+
+        if not self.game_active:
+            self.play_button.draw_button()
+
         
         pygame.display.flip()
         

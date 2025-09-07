@@ -559,3 +559,8 @@ _check_fleet_edges(), _change_fleet_direction()을 만들고 _update_aliens()수
    3. 외계인이 화면 하단에 도달하면 우주선 파괴
    4. 플레이어가 우주선으 ㄹ모두 잃으면 게임을 끝냄
 
+## Date 2025,.09,07
+### chapter 14
+14.1 play버튼 추가
+14.1.1 button 클래스 만들기
+14.1.2 화면에 그리기
