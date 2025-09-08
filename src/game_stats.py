@@ -8,3 +8,4 @@ class GameStats:
     def reset_stats(self):
         """게임 도중에 변경되는 통계 정보를 초기화"""
         self.ships_left = self.settings.ship_limit
+        self.score = 0
