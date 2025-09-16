@@ -1,4 +1,7 @@
 import pygame.font
+from pygame.sprite import Group
+
+from ship import Ship
 
 class Scoreboard:
     """점수를 기록할 클래스
@@ -10,6 +13,7 @@ class Scoreboard:
         Args:
             ai_game (_type_): 실행중인 현재 클래스
         """
+        self.ai_game = ai_game
         self.screen = ai_game.screen
         self.screen_rect = self.screen.get_rect()
         self.settings = ai_game.settings
@@ -21,11 +25,59 @@ class Scoreboard:
 
         # 초기 점수 이미지 
         self.prep_score()
+        self.prep_high_score()
+        self.prep_level()
+        self.prep_ships()
+
+    def prep_ships(self):
+        """우주선이 몇 대 남았는지 표시
+        """
+        self.ships = Group()
+
+        for ship_number in range(self.stats.ships_left):
+            ship = Ship(self.ai_game)
+            ship.rect.x = 10 + ship_number * ship.rect.width
+            ship.rect.y = 10
+            self.ships.add(ship)
+
+    def prep_level(self):
+        """레벨을 이미지로 렌더링
+        """
+        level_str = str(self.stats.level)
+        self.level_image = self.font.render(level_str,
+                                            True,
+                                            self.text_color, 
+                                            self.settings.bg_color)
+        
+        # 레벨을 점수 라래 포시
+        self.level_rect = self.level_image.get_rect()
+        self.level_rect.right = self.score_rect.right
+        self.level_rect.top - self.score_rect.bottom + 20
+
+
+    def prep_high_score(self):
+        """최고 점수를 이미지로 렌더링
+        """
+        high_score = round(self.stats.high_score, -1)
+        high_score_str = f"{high_score:,}"
+        self.high_score_image = self.font.render(high_score_str, 
+                                                  True, 
+                                                  self.text_color, 
+                                                  self.settings.bg_color)
+        
+        # 최고점수를 화면 상단 중앙에 표시
+        self.high_score_rect = self.high_score_image.get_rect()
+        self.high_score_rect.centerx = self.screen_rect.centerx
+        self.high_score_rect.top = self.score_rect.top
+
 
     def prep_score(self):
         """점수를 이미지로 렌더링
         """
-        score_str = str(self.stats.score)
+
+        rounded_score = round(self.stats.score, -1)
+        score_str = f"{rounded_score:,}"
+        # score_str = str(self.stats.score)
         self.score_image = self.font.render(score_str, 
                                             True, 
                                             self.text_color, 
@@ -36,6 +88,16 @@ class Scoreboard:
         self.score_rect.top = 20
 
     def show_score(self):
-        """점수를 화면에 그린다
+        """점수와 레벨을 화면에 그린다
         """
         self.screen.blit(self.score_image, self.score_rect)
+        self.screen.blit(self.high_score_image, self.high_score_rect)
+        self.screen.blit(self.level_image, self.level_rect)
+        self.ships.draw(self.screen)
+
+    def check_high_score(self):
+        """최고 점수가 갱신되었는지 확인
+        """
+        if self.stats.score > self.stats.high_score:
+            self.stats.high_score = self.stats.score
+            self.prep_high_score()

@@ -14,7 +14,7 @@ class Settings:
         
         #탄환 설정
         self.bullet_speed = 3.0 # 탄환 속도
-        self.bullet_width = 300 # 탄환 너비
+        self.bullet_width = 600 # 탄환 너비
         self.bullet_height = 15 # 탄환 높이
         self.bullet_color = (60, 60, 60) # 탄환 색상
         self.bullets_allowed = 3 # 화면에 존재할 수 있는 탄환 수
@@ -37,8 +37,8 @@ class Settings:
         """_summary_
         게임을 진행 하는 동안 변하는 설정 초기화
         """
-        self.ship_speed = 1.5
-        self.bullet_speed = 2.5
+        self.ship_speed = 3.5
+        self.bullet_speed = 5.5
         self.alien_speed = 1.0
 
         # 1은 오른쪽, -1은 왼쪽
@@ -54,4 +54,4 @@ class Settings:
         self.bullet_speed *= self.speedup_scale
         self.alien_speed *= self.speedup_scale
 
-        self.alien_points = int(self.alien_points * self.score_scale``)
+        self.alien_points = int(self.alien_points * self.score_scale)

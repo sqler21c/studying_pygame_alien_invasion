@@ -131,6 +131,8 @@ class AlienInvasion:
             self.settings.initialize_dynamic_settings()
             self.stats.reset_stats()
             self.sb.prep_score()
+            self.sb.prep_level()
+            self.sb.prep_ships()
             self.game_active = True
 
             # 남아 있는 탄환과 외계인을 모두 제거
@@ -163,7 +165,7 @@ class AlienInvasion:
         """탄환과 외계인의 충돌을 처리"""
         # 외계인을 맞힌 탄환이 있는지 확인
         # 맞힌 탄환이 있으면 외계인 제거
-        collisions = pygame.sprite.groupcollide(self.bullets, 
+        collisions = pygame.sprite.groupcollide(self.bullets,  
                                                 self.aliens, 
                                                 True, 
                                                 True)
@@ -172,12 +174,17 @@ class AlienInvasion:
             for aliens in collisions.values():
                 self.stats.score += self.settings.alien_points * len(aliens)
             self.sb.prep_score()
+            self.sb.check_high_score()
 
         if not self.aliens:
             # 남아 있는 탄환을 제거하고 함대를 새로 만듦
             self.bullets.empty()
             self._create_fleet()
             self.settings.increase_speed()
+
+            # 레벨을 올림
+            self.stats.level += 1
+            self.sb.prep_level()
 
 
     def _update_aliens(self):
