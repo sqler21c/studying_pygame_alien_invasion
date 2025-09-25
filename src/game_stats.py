@@ -5,6 +5,11 @@ class GameStats:
         self.settings = ai_game.settings
         self.reset_stats()
 
+        # 최고 점수는 초기화 하지 않음
+        self.high_score = 0
+
     def reset_stats(self):
         """게임 도중에 변경되는 통계 정보를 초기화"""
         self.ships_left = self.settings.ship_limit
+        self.score = 0
+        self.level = 1

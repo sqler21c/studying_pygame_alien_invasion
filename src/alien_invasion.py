@@ -4,6 +4,8 @@ from time import sleep
 import pygame
 from settings import Settings
 from game_stats import GameStats
+from scoreboard import Scoreboard
+from button import Button
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
@@ -33,6 +35,7 @@ class AlienInvasion:
 
         # 게임 통계 인스턴스 생성
         self.stats = GameStats(self)
+        self.sb = Scoreboard(self)
 
         
         self.ship = Ship(self)  # 우주선 인스턴스 생성
@@ -45,8 +48,12 @@ class AlienInvasion:
         # 배경색 설정
         self.bg_color = self.settings.bg_color
 
-        # 게임을 활성 상태로 시작
-        self.game_active = True
+        # 게임을 비활성 상태로 시작
+        self.game_active = False
+
+        # Play 버튼 만들기
+        self.play_button = Button(self, "Play")
+
 
     def run_game(self):
         """ Start the main loop for the game """
@@ -105,6 +112,43 @@ class AlienInvasion:
                 #     self.ship.moving_right = False
                 # elif event.key == pygame.K_LEFT:
                 #     self.ship.moving_left = False
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_play_button(mouse_pos)
+
+    def _check_play_button(self, mouse_pos):
+        """Check if the play button has been clicked.
+
+        Args:
+            mouse_pos (tuple): The (x, y) position of the mouse.
+        """
+
+        button_clicked = self.play_button.rect.collidepoint(mouse_pos)
+        if button_clicked and not self.game_active:
+        # if self.play_button.rect.collidepoint(mouse_pos):
+            # 게임 초기화 
+            self.settings.initialize_dynamic_settings()
+            self.stats.reset_stats()
+            self.sb.prep_score()
+            self.sb.prep_level()
+            self.sb.prep_ships()
+            self.game_active = True
+
+            # 남아 있는 탄환과 외계인을 모두 제거
+            self.bullets.empty()
+            self.aliens.empty()
+
+            # 함대를 새로 만들고 우주선을 화면 하단 중앙으로이동
+            self._create_fleet()
+            self.ship.center_ship()
+
+            # 마우스 커서 숨기기
+            pygame.mouse.set_visible(False)
+
+
+
+
             
     def _update_bullets(self):
         """ 탄환 위치를 업데이트하고 사라진 탄환을 제거"""
@@ -121,14 +165,26 @@ class AlienInvasion:
         """탄환과 외계인의 충돌을 처리"""
         # 외계인을 맞힌 탄환이 있는지 확인
         # 맞힌 탄환이 있으면 외계인 제거
-        collisions = pygame.sprite.groupcollide(self.bullets, 
+        collisions = pygame.sprite.groupcollide(self.bullets,  
                                                 self.aliens, 
                                                 True, 
                                                 True)
+        
+        if collisions:
+            for aliens in collisions.values():
+                self.stats.score += self.settings.alien_points * len(aliens)
+            self.sb.prep_score()
+            self.sb.check_high_score()
+
         if not self.aliens:
             # 남아 있는 탄환을 제거하고 함대를 새로 만듦
             self.bullets.empty()
             self._create_fleet()
+            self.settings.increase_speed()
+
+            # 레벨을 올림
+            self.stats.level += 1
+            self.sb.prep_level()
 
 
     def _update_aliens(self):
@@ -175,6 +231,8 @@ class AlienInvasion:
             sleep(0.5)
         else:
             self.game_active = False
+            pygame.mouse.set_visible(True)
+
 
     def _create_fleet(self):
         """ 외계인 함대를 만듦"""
@@ -231,6 +289,14 @@ class AlienInvasion:
             
         self.ship.blitme()
         self.aliens.draw(self.screen) # 외계인 그리기
+        
+        # 점수 정보를 그린다
+        self.sb.show_score()
+
+        # 게임이 비활성화 상태이면 플레이 버튼을 그린다
+        if not self.game_active:
+            self.play_button.draw_button()
+
         
         pygame.display.flip()
         
