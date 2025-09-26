@@ -94,3 +94,15 @@
       y 값을 전달하고 pyplot이 사용핦 컬러 맵을 cmap 인수로 전달
    ```
 15.2.9 자동으로 그래프 저장하기  plt.savefig()사용
+
+## Date 25.09.26
+### make class RandomWal 
+1. Randomwalk class
+   1. 다음 움직임이 어느 방향을 취할지 랜덤하게 결정 여러가지 상황에 적용할 수 있음
+   2. random_walk.py
+2. 방향 결정하기
+   1. fill_walk() 메스드를 통해 결정  in random_walk.py
+3. 그래프 그리기
+   1. rm_visual.py
+4. 여러개 만들기  
+   1. while 
