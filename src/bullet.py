@@ -25,6 +25,7 @@ class Bullet(Sprite):
         self.y -= self.settings.bullet_speed
         # 사각형(rect) 위치 업데이트
         self.rect.y = self.y
+        
     def draw_bullet(self):
         """ 화면에 탄환을 그리기 """
         pygame.draw.rect(self.screen, self.color, self.rect)

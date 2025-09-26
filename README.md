@@ -405,10 +405,186 @@ import sys, os는 해야 함
    ```python
    # alien.py
    
+   import pygame
+   from pygame.sprite import Sprite
+   class Alien(Sprite):
+    """함 대에 외계인 하나를 나타내는 클래스"""
+    def __init__(self, ai_game):
+        """ 외계인 추기화하고 시작 위치 설정"""
+        super().__init__()
+        self.screen = ai_game.screen
+
+        # 외계인 이미지 불러와  rect 속성 설정
+        self.image = pygame.image.loade('src/images/alien.bmp')
+        self.rect = self.image.get_rect()
+
+        # 외계인은 좌면 좌측 상단 근처에 만듦
+        self.rect.x = self.rect.width  #1
+        self.rect.y = self.rect.height
+
+        # 외계인의 정확한 가로 위치 저장
+        self.x = float(self.rect.x) #2
    ```
+   ship class와 비슷하지만, 외계인을 화면ㅇ에 배치하는 부분이 다르다. 먼저 외계인을 화면의 왼쪽 상단 꼭짓점 근처에 배치 , 외계인을 알아보기 쉽도록 왼쪽에는 외계와 같은 공백을 두고(#1) 위에도 외계인의 높이와 같은 공ㄷ백, 지금은 외계인의 가로방향 움직임에 주의 가로 방향좌표 추적(#2)
+
+2. make Alien instance
+   AlienInvasion init()  마지막에 인스턴스 생성 코드 추가, 결국 외계인 함대 전체를 만듦, 추가 보조 메서드 
+   _create_fleet()을 새로 만듦
+   ```python
+   # alien_invasion.py
+
+   from alien import Alien
+
+   def __init__(self):
+      -- 생략 --
+      self.alien = pygame.sprite.Group()
+
+      self._create_fleet()
+
+   def _create_fleet(self):
+      alien = Alien(self)
+      slelf.aliens.add(alien)
+
+   def _update_screen(self):
+      self.aliens.draw(self.screen)
+   ```
+### 외계인 함대 만들기
+1. 외계인 한줄 만들기
+   하나를 만들어 너비를 파악 후 외계인을 화면 왼쪽에 배치한 다음 공간이 있으면 추가 이를 계속
+
+
 
 ## Date 2025.08.27
 ### Addedee Studying git
 > ./src 폴더에 STUDYGIT.md 파일 추가 후 link
 
 [click >> ](./src/STUDYGIT.md)
+
+## Date 2025.08.29
+### 외계인 함대 만들기 
+2. _create_fleet() 리팩터링
+   보조 메서드 _create_alien()추가 하고 _create_fleet()에서 호출 하는 방식으로
+   ```python
+   def _create_fleet(self):
+        """ 외계인 함대를 만듦"""
+        # 외계인 하나를 만들어서 그 너비와 높이를 구함
+        alien = Alien(self)
+        alien_width = alien.rect.width
+
+        current_x = alien_width
+        while current_x <(self.settings.screen_width -2 * alien_width):
+            # new_alien = Alien(self)
+            # new_alien.x = current_x
+            # new_alien.rect.x = new_alien.x
+            # self.aliens.add(new_alien)
+            self._create_alien(current_x)
+            current_x += 2 * alien_width
+            
+            # self.aliens.add(alien)
+
+    def _create_alien(self, x_position):
+        new_alien = Alien(self)
+        new_alien.x = x_position
+        new_alien.rect.x = x_position
+        self.aliens.add(new_alien)
+   ```
+3. 줄 추가하가
+   현재 루프를 또 다른 while루프로 감쌉니다. 내부는 외계인 하줄, 외루 루프는 y값에 맞춰 세로로 베치
+   ```python
+    def _create_fleet(self):
+        """ 외계인 함대를 만듦"""
+        # 외계인 하나를 만들어서 그 너비와 높이를 구함 공간이 없을때까지 계속 추가
+        # 외계인 사이의 공간으 ㄴ외계인의 너비와 높이와 같음
+        alien = Alien(self)
+        # alien_width = alien.rect.width
+        alien_width, alien_height = alien.rect.size #1
+
+        current_x, current_y = alien_width, alien_height #2
+                # current_x = alien_width
+        while current_y < (self.settings.screen_height - 3 * alien_height):#3
+            while current_x <(self.settings.screen_width -2 * alien_width):
+                # new_alien = Alien(self)
+                # new_alien.x = current_x
+                # new_alien.rect.x = new_alien.x
+                # self.aliens.add(new_alien)
+                # self._create_alien(current_x)
+                self._create_alien(current_x, current_y) #4
+                current_x += 2 * alien_width
+            
+                # self.aliens.add(alien)
+            
+            #한줄이 끝났으니 x값은 초기화 y값은 늘린다.
+            current_x = alien_width #5
+            current_y += 2 * alien_height #5
+
+    def _create_alien(self, x_position, y_position):
+        new_alien = Alien(self)
+        new_alien.x = x_position
+        new_alien.rect.x = x_position
+        new_alien.rect.y = y_position
+        self.aliens.add(new_alien)
+   ```
+
+## Date 2025.09.01
+### 함대 오른쪽으로 움직이기
+
+## Date 2025.09.03
+### 외계인 아래로 내리고 방향을 반대로 바꾸기
+외계인이 경계에 도달하면 함대 전체를 한 줄 내리고 좌우 방향을 바꿔야 함. 
+_check_fleet_edges(), _change_fleet_direction()을 만들고 _update_aliens()수정
+
+## Date 2025.09.04
+### 외계인 격추
+게임 프로그래밍에서 충돌은 게임 요소가 겹치는 걸 말합니다.
+탄환이 외계인으 ㄹ격추하려면 sprite.groupcollide()함수를 써서 그룹요소 사이의 충돌을 검색
+1. 탄환 적중 감지
+   1. sprite.groupcollide()함수는 두그룹 요소의 rects를 비교
+   2. 충돌한 탄환과 외계인을 딕셔너리에 담아 반환
+   3. 이 디셔너리의 키는 탄환이고 값은 외계인
+   4. 점수판을 만들때도사용 함
+   5. _update_bullets()의 마지막에 코드추가 충돌 확인
+2. 더큰탄환으로 빠르게 테스트하기
+   1. self.bullet_width = 300 # 탄환 너비
+3. 함대 다시 생성하기
+   1. 함대 전체를 격추하면 외게인 함대가 새로 나타납니다.
+   2. alien그룹이 비어 있는지 확인 하고 비어 있다면 _creat_fleet()을 호출,
+   3. 외계인을 파괴하는 _update_bullets() 마지막에서 이작업 수행
+4. 탄환 속도 올리기
+   1. self.bullet_speed = 3.0 # 탄환 속도
+5. _update_bullets()리팩터링
+   1. 탄환과 외계인의 충돌을 검색하고 함대 전체가 파괴된 경우 새로 만드는 _check_bullet_alien_collisions() 메서드 
+6. 게임 종료
+   1. 우주선 숫자 제한
+   2. 외계인이 우주선 파괴
+   3. 외계인이 화면 하단에 도달하면 우주선 파괴
+   4. 플레이어가 우주선으 ㄹ모두 잃으면 게임을 끝냄
+
+## Date 2025,.09,07
+### chapter 14
+14.1 play버튼 추가
+14.1.1 button 클래스 만들기
+14.1.2 화면에 그리기
+
+
+## Date 2025.09.08
+14.1.4 게임 초기화 하기
+14.1.5 플레이 버튼 비활성화 
+14.1.6 마우스 커서 숨기기
+
+14.2 레벨업
+이제 플레이어가 함대를 클리어 할 때마다 게임의 속도를 높여 더 현실감 있거 어려워 지게 만들어 봅시다.
+14.2.1 속도 설정 수정하기
+14.2.2 속도 초기화 하기
+14.3 점수
+14.3.1 점수 표시
+14.3.2 점수판 만들기
+14.3.3 외계인을 격추할 때 점수 업데이트
+14.3.4 점수 초기화 
+14.3.5 모든 점수 제대로 확인 하기
+14.3.6 난이도에 따라점수 늘리기
+
+## Date 2025.09.16
+14.3.7 점수 반올림
+14.3.8 최고 점수 표시
+14.3.9 레벨 표시
+14.3.10 남은 우주선 숫자 표시

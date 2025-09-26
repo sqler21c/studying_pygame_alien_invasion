@@ -1,10 +1,13 @@
 import pygame
+from pygame.sprite import Sprite
 
-class Ship:
+
+class Ship(Sprite):
     """우주선 관리 클래스"""
     
     def __init__(self, ai_game):
         """우주선 초기화 하고 시작 위치 설정"""
+        super().__init__()
         self.screen = ai_game.screen
         self.settings = ai_game.settings # 
         self.screen_rect = ai_game.screen.get_rect()
@@ -40,3 +43,8 @@ class Ship:
     def blitme(self):
         """우주선을 현재 위치에 그림"""
         self.screen.blit(self.image, self.rect)
+
+    def center_ship(self):
+        """우주선을 화면 중앙 하단에 위치"""
+        self.rect.midbottom = self.screen_rect.midbottom
+        self.x = float(self.rect.x)
