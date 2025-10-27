@@ -24,13 +24,18 @@ class RandomWalk:
         while len(self.x_values) < self.num_points:
 
             # check direction and distance
-            x_direction = choice([1, -1])
-            x_distance = choice([0, 1, 2, 3, 4])
-            x_step = x_direction * x_distance
+            # x_direction = choice([1, -1])
+            # x_distance = choice([0, 1, 2, 3, 4])
+            # # x_distance = choice([0, 1, 2, 3, 4, 5, 6,7,8,9,10])
+            # x_step = x_direction * x_distance
 
-            y_direction = choice([1, -1])
-            y_distance = choice([1, 2, 3, 4])
-            y_step = y_direction * y_distance
+            # y_direction = choice([1, -1])
+            # y_distance = choice([1, 2, 3, 4])
+
+            # y_step = y_direction * y_distance
+
+            x_step = self.get_steps()
+            y_step = self.get_steps()
 
             # 움직임이 없는 결정은 버림
             if x_step == 0 and y_step == 0:
@@ -42,3 +47,9 @@ class RandomWalk:
 
             self.x_values.append(x)
             self.y_values.append(y)
+
+    def get_steps(self):
+        direction = choice([1, -1])
+        distance = choice([0, 1, 2, 3, 4])
+        step = direction * distance
+        return step

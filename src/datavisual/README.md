@@ -106,3 +106,29 @@
    1. rm_visual.py
 4. 여러개 만들기  
    1. while 
+
+## Date 25.09.27
+1. 랜덤워크에 스타일 적용
+2. 시작점과 끝점 그리기
+3. 축 정리하기
+   1. 축이 중요하지 않으며 제거해도 됨 
+   2. ax.get_xaxis().set_visible(False)
+   3. ax.get_yaxis().set_visivle(False)
+4. 포인트 추가하기
+5. 크기를 조정해 화면 채우기
+
+## Date 25.10.01
+1. plotly와 주사위
+   1. ploty설치
+      1. python -m pip install --user plotly
+      2. python -m pip install --user pandas
+      3. [plotly site](https://plotlycom/python)
+2. Die 클래 만들기
+3. 주사위 굴리기
+4. histogram 
+   1. [plotly other type graph](https://plotly.com/python/plotly-express)
+
+## Date 25.10.03
+1. 주사위 두개 돌리기
+2. 추가 설정하기
+3. 결과 저장하기

@@ -12,3 +12,7 @@ share/
 Scripts/
 
 *.png
+*.html
+*.csv
+*.pdf
+

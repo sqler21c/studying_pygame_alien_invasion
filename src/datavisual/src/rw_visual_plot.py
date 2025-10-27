@@ -21,12 +21,17 @@ while True:
     fig, ax = plt.subplots(figsize=(15, 9))
     point_numbers = range(rw.num_points)
 
-    ax.scatter(rw.x_values, 
-               rw.y_values, 
-               c=point_numbers, 
-               cmap=plt.cm.Blues, 
-               edgecolors='none', 
-               s=1)
+    # ax.scatter(rw.x_values, 
+    #            rw.y_values, 
+    #            c=point_numbers, 
+    #            cmap=plt.cm.Blues, 
+    #            edgecolors='none', 
+    #            s=1)
+
+    ax.plot(rw.x_values, 
+            rw.y_values, 
+            linewidth=1)
+    
     ax.set_aspect('equal')
 
     # 시작점과 끝점 강조
