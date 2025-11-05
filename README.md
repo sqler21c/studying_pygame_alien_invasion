@@ -588,3 +588,7 @@ _check_fleet_edges(), _change_fleet_direction()을 만들고 _update_aliens()수
 14.3.8 최고 점수 표시
 14.3.9 레벨 표시
 14.3.10 남은 우주선 숫자 표시
+
+
+# Django Study
+[here](./src/django/readme.md)
