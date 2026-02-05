@@ -132,3 +132,56 @@
 1. 주사위 두개 돌리기
 2. 추가 설정하기
 3. 결과 저장하기
+
+## Date 25.11.05
+1. 데이터 시각화 : 데이터 내려받기
+   1. make folder : weather_data
+2. 해더와 위치 출력
+## Data 25.11.06
+3. 데이터 추출과 읽기
+4. 기온 그래프 그리기
+5. 그래프에 날짜 추가
+   1. 날짜는 문자열이므로'2027-02-02'이라는 문자열을 날짜 객체로 변환
+   2. datetime모듈의 strptime() 메서드를 써서 날짜 객체를 만들수 있음
+      ```
+         >>> from datetime import datetime
+         >>> first_date = datetime.strptime('2022-07-01', '%Y-%m-%d')
+      ```
+6. 최저 온도 추가
+7. 그래프 음영추가
+   1. 두가지 데이터가 있으므로 이제 메일 온도범위를 알아볼수 있음. 최고, 최저 사이에 음영
+   2. fill_between() x값 한개와 y값 두개를 받고 y값 사이의 공간을 채움
+8. 전세계 지진 데이터  GeoJSON형식 (json사용 법은 이책 10장에 잘....)
+   1. **Plotly**의 scatter_geo()를 사용 지진의 분호를 명확히 보여주는 시각화
+   2. 전체 지진 리스트 만들기
+   3. 지진의 규모 추출하기
+   4. 위치 데이터 추출
+   5. 세계지도 그리기
+   6. 지진 규모 색깔 설정
+9. chapter 17 데이터 시각화:api사용하기
+   1.  웹 api사용
+       1.  https://api.github.com/search/repositories?q=language:python+sort:stars 사용
+       2.  requests설치하기
+           1.  python -m pip install requests
+       3.  응답 딕셔너리 다루기
+       4.   api  속도 제한 확인
+            1.   대부문의  API 는 속도제한을 통해 일정시ㅔ간 동안 보낼 수 있는 요청을 제한
+            2.   https://api.github.com/rate_limit
+       5.  plotly 로 저장소 시각화 (python_repos_visual.py)
+       6.  그래프스타일 지정
+       7.  그래프에 툴팁 추가
+       8.  그래프에 링크 추가
+       9.  Plotly와 github API
+           1.  [Plotly](https://plotly.com/python/plotly-express)
+           2.  [gitHub API(English)](https://docs.github.com/en/rest)
+           3.  [gitHub API(Korean)](https://docs.github.com/kr/rest)
+           4.  [github public-apis](https://github.com/public-apis)
+       10. 해커 뉴스 api
+           1.  https://news.ycombinator.com/
+           2.  https://hacker-news.firebaseio.com/v0/item/31353677.json (hn_articale.py)
+           3.  다음은 해커 뉴스의 인기있는 글 ID리스트 반환(hn_submissions.py)
+               1.  https://hacker-news.firebaseio.com/v0/topstories.json
+               2.  해커 뉴스 API정보가 더 궁금하면
+                   1.  [hacker news](https://github.com/HackerNews/API)
+       11. 연습문제
+           1.  
